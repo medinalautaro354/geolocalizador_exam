@@ -48,8 +48,8 @@ namespace AdreaniExam.Interactor.RabbitMQConsumerService
 
         public void Dispose()
         {
-            serviceScope.Dispose();
-            serviceProvider.Dispose();
+            //serviceScope.Dispose();
+            //serviceProvider.Dispose();
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -71,13 +71,21 @@ namespace AdreaniExam.Interactor.RabbitMQConsumerService
             var consumer = new EventingBasicConsumer(rabbitMqChannel);
             consumer.Received += async (model, ea) =>
             {
-                var body = ea.Body.ToArray();
-                var message = Encoding.UTF8.GetString(body);
-                var jsonResponse = JsonConvert.DeserializeObject<AddressResultApi>(message);
+                try
+                {
+                    var body = ea.Body.ToArray();
+                    var message = Encoding.UTF8.GetString(body);
+                    var jsonResponse = JsonConvert.DeserializeObject<AddressResultApi>(message);
 
-                var dto = addressResultDtoFactory.BuildToAddressRequestResultDto(jsonResponse.AddressRequestId, Convert.ToDouble(jsonResponse.Longitud), Convert.ToDouble(jsonResponse.Latitud));
+                    var dto = addressResultDtoFactory.BuildToAddressRequestResultDto(jsonResponse.AddressRequestId, Convert.ToDouble(jsonResponse.Longitud), Convert.ToDouble(jsonResponse.Latitud));
 
-                await updateAddressResultInteractor.Update(dto);
+                    await updateAddressResultInteractor.Update(dto);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                
 
                 rabbitMqChannel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
             };

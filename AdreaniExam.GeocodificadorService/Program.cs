@@ -58,15 +58,22 @@ namespace AdreaniExam.GeocodificadorService
             var consumer = new EventingBasicConsumer(rabbitMqChannel);
             consumer.Received += async (model, ea) =>
             {
-                var body = ea.Body.ToArray();
-                var message = Encoding.UTF8.GetString(body);
-                var entity = JsonConvert.DeserializeObject<AddressRequestMessageDto>(message);
+                try
+                {
+                    var body = ea.Body.ToArray();
+                    var message = Encoding.UTF8.GetString(body);
+                    var entity = JsonConvert.DeserializeObject<AddressRequestMessageDto>(message);
 
-                await api.GetLatitudeAndLongitudeByAddress(entity);
+                    await api.GetLatitudeAndLongitudeByAddress(entity);
 
-                Console.WriteLine(" Se recibio: " + message);
-                rabbitMqChannel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
-                Thread.Sleep(1000);
+                    Console.WriteLine(" Se recibio: " + message);
+                    rabbitMqChannel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+                    Thread.Sleep(1000);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             };
             rabbitMqChannel.BasicConsume(queue: queueName,
                                  autoAck: false,
