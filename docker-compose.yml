@@ -1,0 +1,21 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
+
+version: '3.4'
+
+services:
+  adreaniexam:
+    image: adreaniexam
+    build:
+      context: .
+      dockerfile: AdreaniExam/Dockerfile
+    ports:
+      - 443
+    depends_on:
+      - db
+  db:
+    image: "mcr.microsoft.com/mssql/server"
+    ports:
+      - 1433:1433
+    environment:
+      SA_PASSWORD: "Asda@3321C"
+      ACCEPT_EULA: "Y" 
