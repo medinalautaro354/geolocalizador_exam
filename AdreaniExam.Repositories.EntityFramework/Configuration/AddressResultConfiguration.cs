@@ -18,11 +18,11 @@ namespace AdreaniExam.Repositories.EntityFramework.Configuration
             builder.Property(f => f.State).IsRequired();
             builder.Property(f => f.IsActive).IsRequired();
 
-            //builder.HasOne(f => f.AddressRequest)
-            //    .WithOne(f => f.AddressResult)
-            //    .HasForeignKey<AddressResult>(f => f.AddressRequestId)
-            //    .HasPrincipalKey<AddressRequest>(f => f.Id)
-            //    .IsRequired();
+            builder.HasOne(f => f.AddressRequest)
+               .WithOne(f => f.AddressResult)
+               .HasForeignKey<AddressResult>(f => f.AddressRequestId)
+               .HasPrincipalKey<AddressRequest>(f => f.Id)
+               .IsRequired();
         }
     }
 }

@@ -18,12 +18,15 @@ namespace AdreaniExam.StartupExtensions
 
         public static IApplicationBuilder SwaggerAppConfiguration(this IApplicationBuilder app, IWebHostEnvironment environment, string appName)
         {
-            app.UseSwagger();
-
-            app.UseSwaggerUI(c =>
+            if(environment.EnvironmentName != Environments.Production)
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", appName);
-            });
+                app.UseSwagger();
+
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", appName);
+                });
+            }
 
             return app;
         }

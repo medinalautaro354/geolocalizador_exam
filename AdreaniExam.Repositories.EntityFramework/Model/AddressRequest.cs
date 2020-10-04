@@ -12,6 +12,6 @@ namespace AdreaniExam.Repositories.EntityFramework.Model
         public string Province { get; set; }
         public string Country { get; set; }
         public bool IsActive { get; set; }
-        //public AddressResult AddressResult { get; set; }
+        public AddressResult AddressResult { get; set; }
     }
 }

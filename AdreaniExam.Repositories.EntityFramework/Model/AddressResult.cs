@@ -10,6 +10,6 @@ namespace AdreaniExam.Repositories.EntityFramework.Model
         public State State { get; set; }
         public bool IsActive { get; set; }
         public int AddressRequestId { get; set; }
-        //public AddressRequest AddressRequest { get; set; }
+        public AddressRequest AddressRequest { get; set; }
     }
 }
